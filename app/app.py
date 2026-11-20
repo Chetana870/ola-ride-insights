@@ -17,6 +17,7 @@ st.set_page_config(page_title="Ola Ride Insights", page_icon="🚖", layout="wid
 ROOT = Path(__file__).parent
 CSV_PATH = ROOT / "data" / "ola_clean.csv"
 SHOT_DIR = ROOT / "powerbi" / "screenshots"
+GREEN = "#92D050"  # chart colour (Ola lime green)
 
 # ---------------------------------------------------------------- queries
 QUERIES = {
@@ -118,7 +119,7 @@ if page == "SQL Insights":
         if len(result) > 1000:
             st.caption("Showing the first 1,000 rows.")
     if chart_index:
-        st.bar_chart(result.set_index(chart_index))
+        st.bar_chart(result.set_index(chart_index), color=GREEN)
 
 
 # ---------------------------------------------------------------- page 2
@@ -159,9 +160,9 @@ elif page == "Ride Explorer":
 
     left, right = st.columns(2)
     left.subheader("Rides by status")
-    left.bar_chart(f["booking_status"].value_counts())
+    left.bar_chart(f["booking_status"].value_counts(), color=GREEN)
     right.subheader("Rides per day")
-    right.line_chart(f.groupby("booking_date").size())
+    right.line_chart(f.groupby("booking_date").size(), color=GREEN)
 
     st.subheader("Matching rides")
     st.dataframe(f.drop(columns=["booking_datetime"]).head(1000),
